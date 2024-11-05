@@ -10,9 +10,19 @@ public class TransformationService implements TransformationUseCase {
 
     @Override
     public Target transform(Source source) {
+        int age = source.getAge();
         Target target = new Target();
+        
         target.setFullName(source.getName());
-        target.setCategory(source.getAge() > 18 ? "Adult" : "Minor");
+        if (age >= 18 && age <= 25) {
+            target.setCategory("Young Adult");
+        } else if (age > 25 && age <= 65) {
+            target.setCategory("Adult");
+        } else if (age > 65) {
+            target.setCategory("Senior");
+        } else {
+            target.setCategory("Minor");
+        }
         return target;
     }
 }
