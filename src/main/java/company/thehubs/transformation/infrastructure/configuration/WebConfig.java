@@ -1,9 +1,10 @@
 package company.thehubs.transformation.infrastructure.configuration;
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 
 import java.util.List;
 
@@ -11,11 +12,11 @@ import java.util.List;
 public class WebConfig {
 
     @Bean
-    public Jaxb2RootElementHttpMessageConverter jaxb2RootElementHttpMessageConverter() {
-        return new Jaxb2RootElementHttpMessageConverter();
+    public MappingJackson2XmlHttpMessageConverter xmlHttpMessageConverter() {
+        return new MappingJackson2XmlHttpMessageConverter(new XmlMapper());
     }
 
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(jaxb2RootElementHttpMessageConverter());
+        converters.add(xmlHttpMessageConverter());
     }
 }
