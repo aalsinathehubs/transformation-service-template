@@ -3,6 +3,7 @@ package company.thehubs.transformation.infrastructure.adapter.input;
 import company.thehubs.transformation.domain.model.Source;
 import company.thehubs.transformation.domain.model.Target;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.PollableChannel;
@@ -15,7 +16,7 @@ public class TransformationController {
     private final MessageChannel inputChannel;
     private final PollableChannel outputChannel;
 
-    public TransformationController(MessageChannel inputChannel, PollableChannel outputChannel) {
+    public TransformationController(@Qualifier("inputChannel") MessageChannel inputChannel, @Qualifier("outputChannel") PollableChannel outputChannel) {
         this.inputChannel = inputChannel;
         this.outputChannel = outputChannel;
     }
