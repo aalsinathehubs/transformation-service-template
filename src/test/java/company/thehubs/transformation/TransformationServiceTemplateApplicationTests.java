@@ -3,7 +3,9 @@ package company.thehubs.transformation;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(properties = {
+    "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration"
+})
 class TransformationServiceTemplateApplicationTests {
 
 	@Test

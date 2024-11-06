@@ -1,6 +1,7 @@
 package company.thehubs.transformation.infrastructure.adapater.input;
 
 import company.thehubs.transformation.domain.model.Source;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
@@ -9,7 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.PollableChannel;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -19,6 +23,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 class TransformationControllerTest {
+
+    @MockBean
+    private MessageChannel inputChannel;
+
+    @MockBean
+    private PollableChannel outputChannel;
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,7 +50,6 @@ class TransformationControllerTest {
 
     @Test
     void shouldTransformSourceToTargetSuccessfully() throws Exception {
-        String sourceJson = objectMapper.writeValueAsString(source);
         String sourceXml = xmlMapper.writeValueAsString(source);
 
         mockMvc.perform(post("/api/transform")
@@ -55,7 +64,7 @@ class TransformationControllerTest {
     @Test
     void shouldReturnUnsupportedMediaTypeForInvalidContentType() throws Exception {
         mockMvc.perform(post("/api/transform")
-                .contentType(MediaType.APPLICATION_JSON) // Incorrecto, debe ser XML
+                .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(source)))
                 .andExpect(status().isUnsupportedMediaType());
